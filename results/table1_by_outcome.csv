@@ -1,0 +1,4 @@
+,n_pairs,n_patients,age_mean_sd,female_pct,baseline_hba1c_mean_sd,target_hba1c_mean_sd,days_between_median,n_visits_mean,seq_len_mean,pct_improved,pct_stable,pct_worsened
+improved,150947,77026,55.2 +/- 14.4,56.6%,8.70 +/- 2.21,7.17 +/- 1.74,171,6.9,138.0,100.0%,0.0%,0.0%
+stable,276094,111838,53.0 +/- 15.2,61.8%,6.45 +/- 1.51,6.46 +/- 1.51,185,6.9,134.3,0.0%,100.0%,0.0%
+worsened,142160,70836,54.8 +/- 14.5,58.0%,7.20 +/- 1.78,8.52 +/- 2.16,189,7.1,143.2,0.0%,0.0%,100.0%

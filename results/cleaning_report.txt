@@ -1,0 +1,72 @@
+==========================================================================================
+STEP 1  Combine batch files, normalise id column, fix NA sodium parsing
+==========================================================================================
+  HBA1C              loaded 1,139,747 rows from ['HBA1C 11.csv', 'HBA1C 22.csv']
+  FBS                loaded   909,870 rows from ['FBS 11.csv', 'FBS 22.csv']
+  CREATININE         loaded 1,196,292 rows from ['CRT 11.csv', 'CRT 22.csv', 'CRT 33.csv']
+  BUN                loaded   175,915 rows from ['BUN 11.csv']
+  LDL                loaded   252,440 rows from ['LDL D .csv']
+  TRIGLYCERIDES      loaded   467,632 rows from ['TRIG 1 D.csv', 'TRIG 2 D.csv']
+  TOTAL_CHOLESTEROL  loaded   483,905 rows from ['CHOL 1 D.xlsx', 'CHOL 2 D.xlsx']
+
+  NA sodium parsing fix: LabTestName unique values now = ['NA'] (literal 'NA' preserved, not nulled)
+
+==========================================================================================
+STEP 2  Cleaning (plausible-range filter + exact-duplicate removal)
+==========================================================================================
+  Creatinine unit normalisation: 167,606 values >=15 treated as umol/L and /88.42 -> mg/dL
+  HBA1C              raw=1,139,747  -missing_val=     0  -missing_ts=   90  -out_of_range[2.0,20.0]= 7,618  -dupes=   584  ->kept=1,131,455
+  FBS                raw=  909,870  -missing_val=     0  -missing_ts=    2  -out_of_range[20.0,900.0]= 5,286  -dupes=   291  ->kept=  904,291
+  CREATININE         raw=1,196,292  -missing_val=     0  -missing_ts=    3  -out_of_range[0.1,20.0]=10,536  -dupes=   743  ->kept=1,185,010
+  BUN                raw=  175,915  -missing_val=     0  -missing_ts=    1  -out_of_range[1.0,200.0]=   387  -dupes=    26  ->kept=  175,501
+  LDL                raw=  252,440  -missing_val=     0  -missing_ts=    2  -out_of_range[10.0,400.0]= 9,405  -dupes=   107  ->kept=  242,926
+  TRIGLYCERIDES      raw=  467,632  -missing_val=     0  -missing_ts=    2  -out_of_range[10.0,3000.0]= 3,207  -dupes=   332  ->kept=  464,091
+  TOTAL_CHOLESTEROL  raw=  483,905  -missing_val=     0  -missing_ts=    2  -out_of_range[40.0,700.0]= 1,921  -dupes=   305  ->kept=  481,677
+
+  HbA1c after cleaning: 1,131,455 measurements, 381,374 patients
+  HbA1c collapsed to date-level draws: 1,128,790 patient-day draws (same-day values averaged)
+
+==========================================================================================
+STEP 3  Build labelled pairs (next HbA1c 90-450 days later)
+==========================================================================================
+  Labelled pairs: 569,201 from 151,750 patients
+  Class counts (all pairs):
+     stable   :  276,094 ( 48.5%)
+     improved :  150,947 ( 26.5%)
+     worsened :  142,160 ( 25.0%)
+  days_between: min=90, median=182, max=450
+  change: mean=-0.073, median=0.000
+
+==========================================================================================
+STEP 4  Assemble token sequences (strictly-before history; reuse vocab.json)
+==========================================================================================
+  Medications mapped to classes: 2,574,105 dispenses, classes=['DPP4', 'GLP1', 'INSULIN_BASAL', 'INSULIN_BOLUS', 'METFORMIN', 'SGLT2', 'SULFONYLUREA']
+  Assembled 569,201 sequences. Mean length=137.5, median=104, max=511
+  Out-of-vocabulary tokens emitted: 0  (none -- all tokens are in vocab.json)
+
+==========================================================================================
+STEP 5  SPLITS
+==========================================================================================
+  PRIMARY temporal + patient-disjoint split:
+    patient overlap train/validation = 0
+    patient overlap train/test       = 0
+    patient overlap validation/test  = 0
+    pairs dropped (out-of-window or patient-year 2024/2025): 210,919
+    train      :  298,918 pairs,  94,933 patients, index dates 2011-02-02 .. 2021-12-31
+                 class balance: improved=84268 (28.2%), stable=134977 (45.2%), worsened=79673 (26.7%)
+    validation :   28,470 pairs,  20,995 patients, index dates 2022-01-02 .. 2022-12-31
+                 class balance: improved=7085 (24.9%), stable=16232 (57.0%), worsened=5153 (18.1%)
+    test       :   30,894 pairs,  22,908 patients, index dates 2023-01-02 .. 2023-12-31
+                 class balance: improved=7572 (24.5%), stable=17307 (56.0%), worsened=6015 (19.5%)
+
+  SECONDARY patient-grouped random 70/15/15 (stratified by patient class):
+    patient overlap (should all be 0): tr/va=0, tr/te=0, va/te=0
+    train      :  397,387 pairs, 106,225 patients | improved=26.5%, stable=48.6%, worsened=24.9%
+    validation :   86,676 pairs,  22,762 patients | improved=26.7%, stable=48.1%, worsened=25.1%
+    test       :   85,138 pairs,  22,763 patients | improved=26.5%, stable=48.6%, worsened=25.0%
+
+==========================================================================================
+STEP 6  Save artifacts
+==========================================================================================
+  splits_temporal.jsonl rows: 358,282
+  splits_random_grouped.jsonl rows: 569,201

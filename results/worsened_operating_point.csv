@@ -1,0 +1,4 @@
+model,worsened_threshold(val Youden),sensitivity,specificity,ppv,npv,f1
+"Transformer (BEHRT, GPU)",0.309,0.6145,0.583,0.2627,0.8622,0.368
+LightGBM,0.278,0.686,0.6072,0.2969,0.8889,0.4144
+LogReg (baseline),0.366,0.336,0.7176,0.2234,0.8172,0.2683

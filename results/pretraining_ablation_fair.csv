@@ -1,0 +1,5 @@
+variant,n_seeds,auroc_macro,auroc_worsened,auprc_worsened,brier,balanced_accuracy
+WITH MLM pretraining,3,0.7264,0.6411,0.3131,0.5268,0.5421
+WITHOUT MLM pretraining,3,0.7259,0.6395,0.3123,0.5212,0.5393
+"WITHOUT MLM pretraining (single seed, as published)",1,0.7278,0.6434,0.3138,0.5192,0.5429
+"WITH MLM pretraining (single seed, for reference)",1,0.7274,0.6463,0.3141,0.5305,0.543

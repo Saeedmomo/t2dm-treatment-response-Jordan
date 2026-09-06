@@ -1,0 +1,7 @@
+model,variant,temperature,brier,ece_improved,ece_stable,ece_worsened,ece_mean,slope_improved,intercept_improved,slope_stable,intercept_stable,slope_worsened,intercept_worsened
+"Transformer (BEHRT, GPU)",raw,0.753,0.5268,0.0367,0.1485,0.1136,0.0996,1.097,-0.157,1.233,0.796,1.013,-0.635
+"Transformer (BEHRT, GPU)",temp_scaled,0.753,0.518,0.0383,0.1257,0.0994,0.0878,0.826,-0.33,0.92,0.617,0.761,-0.763
+LightGBM,raw,0.852,0.4993,0.0368,0.1262,0.0894,0.0841,1.02,-0.239,1.08,0.664,0.969,-0.574
+LightGBM,temp_scaled,0.852,0.4959,0.0386,0.113,0.0795,0.077,0.867,-0.331,0.916,0.575,0.83,-0.637
+LogReg (baseline),raw,0.644,0.5521,0.0338,0.1555,0.1467,0.112,1.207,0.161,1.307,0.808,0.565,-1.048
+LogReg (baseline),temp_scaled,0.644,0.5359,0.0425,0.1197,0.1317,0.098,0.791,-0.106,0.853,0.535,0.354,-1.156

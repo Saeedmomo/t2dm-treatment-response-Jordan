@@ -1,0 +1,13 @@
+model,variable,best_subgroup,best_auroc_worsened,worst_subgroup,worst_auroc_worsened,gap,gap_ci_low,gap_ci_high,crosses_zero
+"Transformer (BEHRT, GPU)",sex,MALE,0.6398,FEMALE,0.6376,0.0022,-0.0132,0.019,True
+"Transformer (BEHRT, GPU)",age_group,55-70,0.6397,<40,0.6017,0.038,0.0137,0.0611,False
+"Transformer (BEHRT, GPU)",baseline_hba1c_band,>=9,0.6777,8-9,0.5982,0.0795,0.0453,0.1118,False
+"Transformer (BEHRT, GPU)",history_length,long (>3 visits),0.6639,short (<=3 visits),0.6327,0.0312,0.0124,0.0503,False
+LightGBM,sex,FEMALE,0.7068,MALE,0.6914,0.0153,0.0001,0.0316,False
+LightGBM,age_group,<40,0.726,>=70,0.6704,0.0555,0.0256,0.0866,False
+LightGBM,baseline_hba1c_band,<7,0.7089,8-9,0.5966,0.1123,0.0803,0.1412,False
+LightGBM,history_length,long (>3 visits),0.7202,short (<=3 visits),0.697,0.0231,0.0055,0.0415,False
+LogReg (baseline),sex,MALE,0.5233,FEMALE,0.5014,0.0219,0.0059,0.0402,False
+LogReg (baseline),age_group,55-70,0.5092,<40,0.4599,0.0493,0.0225,0.0779,False
+LogReg (baseline),baseline_hba1c_band,>=9,0.6298,<7,0.4882,0.1416,0.1184,0.1646,False
+LogReg (baseline),history_length,short (<=3 visits),0.5288,long (>3 visits),0.4827,0.046,0.0264,0.065,False
