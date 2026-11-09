@@ -1,0 +1,7 @@
+category,n_patients,pct_of_total
+Sex/DOB (any),382537,100.0
+Diagnosis,153097,40.0
+Medications,102465,26.8
+Vitals (any),75569,19.8
+Labs (any),382536,100.0
+HbA1c specifically,382472,100.0

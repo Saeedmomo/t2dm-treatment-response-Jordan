@@ -1,0 +1,122 @@
+{
+  "Figure2": {
+    "source": "Existing V9 figure and Tables S5/S25",
+    "cohort": 78732,
+    "burden_counts": [
+      47700,
+      24146,
+      5976,
+      819,
+      84,
+      7,
+      0
+    ],
+    "cooccurrence_counts": [
+      [
+        24122,
+        3572,
+        1284,
+        1157,
+        443,
+        338,
+        213,
+        146
+      ],
+      [
+        3572,
+        6162,
+        516,
+        394,
+        96,
+        53,
+        31,
+        84
+      ],
+      [
+        1284,
+        516,
+        3187,
+        252,
+        46,
+        31,
+        18,
+        46
+      ],
+      [
+        1157,
+        394,
+        252,
+        2860,
+        36,
+        33,
+        21,
+        29
+      ],
+      [
+        443,
+        96,
+        46,
+        36,
+        983,
+        58,
+        9,
+        4
+      ],
+      [
+        338,
+        53,
+        31,
+        33,
+        58,
+        686,
+        22,
+        4
+      ],
+      [
+        213,
+        31,
+        18,
+        21,
+        9,
+        22,
+        513,
+        4
+      ],
+      [
+        146,
+        84,
+        46,
+        29,
+        4,
+        4,
+        4,
+        306
+      ]
+    ],
+    "cooccurrence_groups": 8
+  },
+  "Figure5": {
+    "raw_roc_vector_source": "D:\\Hakeem_compitition\\new_code\\GPU_trans\\figures_main\\Fig2_performance.pdf",
+    "raw_roc_source_sha256": "e9f4b679dd7399de0999c4f79c83ed0672f4ff2559784a9d0b5ad2b5f76683ab",
+    "auroc": {
+      "Transformer": [
+        0.7877774898860768,
+        0.7504006789974828,
+        0.6410816982624832
+      ],
+      "LightGBM": [
+        0.8101700874814768,
+        0.7717161778070118,
+        0.7015755759121027
+      ],
+      "Logistic regression": [
+        0.7917410519023662,
+        0.7330832842253608,
+        0.5178882850352313
+      ]
+    },
+    "dca_source": "_dca_v5.npy",
+    "dca_probability_scale": "vector-scaled",
+    "no_new_model_fitting": true
+  }
+}

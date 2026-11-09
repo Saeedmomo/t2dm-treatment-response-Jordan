@@ -1,0 +1,5 @@
+,n_pairs,n_patients,age_mean_sd,female_pct,baseline_hba1c_mean_sd,target_hba1c_mean_sd,days_between_median,n_visits_mean,seq_len_mean,pct_improved,pct_stable,pct_worsened
+split_train,298918,94933,53.9 +/- 14.6,59.9%,7.38 +/- 2.07,7.30 +/- 1.99,188,5.3,107.8,28.2%,45.2%,26.7%
+split_validation,28470,20995,50.1 +/- 15.9,59.8%,6.67 +/- 1.95,6.47 +/- 1.71,206,4.1,81.8,24.9%,57.0%,18.1%
+split_test,30894,22908,50.7 +/- 16.3,59.2%,6.68 +/- 1.93,6.52 +/- 1.73,209,3.0,60.8,24.5%,56.0%,19.5%
+all_pairs,569201,151750,54.0 +/- 14.9,59.5%,7.24 +/- 2.02,7.16 +/- 1.94,182,6.9,137.5,26.5%,48.5%,25.0%

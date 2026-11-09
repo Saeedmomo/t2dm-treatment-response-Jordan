@@ -1,0 +1,25 @@
+family,condition,model,n_seeds,n_test,auroc_macro,auroc_worsened,auprc_worsened,brier,balanced_accuracy
+primary,"primary (+/-0.5, 90-450, temporal)","Transformer (BEHRT, GPU)",3,30894.0,0.7264,0.6411,0.3131,0.5268,0.5421
+primary,"primary (+/-0.5, 90-450, temporal)",LightGBM,1,30894.0,0.7612,0.7016,0.3747,0.4993,0.5676
+primary,"primary (+/-0.5, 90-450, temporal)",LogReg (baseline),1,30894.0,0.6809,0.5179,0.2104,0.5521,0.5051
+A,secondary grouped-random split,"Transformer (BEHRT, GPU)",1,85138.0,0.7458,0.6953,0.4396,0.5494,0.5697
+A,secondary grouped-random split,LightGBM,1,,0.7673,0.7276,,,
+A,secondary grouped-random split,LogReg (baseline),1,,0.6811,0.5465,,,
+A,"primary configuration, seeds 3-4","Transformer (BEHRT, GPU)",2,30894.0,0.7276,0.6424,0.3156,0.5222,0.5443
+A,label threshold +/-0.3,"Transformer (BEHRT, GPU)",3,30894.0,0.6813,0.6246,0.4051,0.5932,0.4973
+A,label threshold +/-1.0,"Transformer (BEHRT, GPU)",3,30894.0,0.8141,0.6991,0.202,0.3941,0.6324
+A,follow-up window 90-365 days,"Transformer (BEHRT, GPU)",3,26755.0,0.732,0.6516,0.3174,0.5092,0.5424
+B,sequence length 128 (vs 96),"Transformer (BEHRT, GPU)",1,30894.0,0.7273,0.6444,0.3159,0.523,0.5424
+B,4 fine-tuning epochs (vs 2),"Transformer (BEHRT, GPU)",1,30894.0,0.7297,0.6478,0.3215,0.512,0.5415
+B,learning rate 1e-4 (vs 3e-4),"Transformer (BEHRT, GPU)",1,30894.0,0.723,0.63,0.3055,0.5316,0.5448
+B,learning rate 5e-4 (vs 3e-4),"Transformer (BEHRT, GPU)",1,30894.0,0.728,0.6494,0.3192,0.5218,0.5402
+B,"capacity: hidden 384, 6 layers (11.1M params)","Transformer (BEHRT, GPU)",1,30894.0,0.7315,0.652,0.3178,0.5067,0.5448
+B,4 MLM pretraining epochs (vs 2),"Transformer (BEHRT, GPU)",1,30894.0,0.7237,0.6327,0.309,0.526,0.5427
+C,numeric parity: continuous features added,"Transformer (BEHRT, GPU)",3,30894.0,0.7542,0.6911,0.3505,0.5039,0.5528
+D,"no MLM pretraining, 3 seeds","Transformer (BEHRT, GPU)",3,30894.0,0.7259,0.6395,0.3123,0.5212,0.5393
+A,label threshold +/-0.3,LightGBM,1,,0.7199,0.6841,,,
+A,label threshold +/-0.3,LogReg (baseline),1,,0.6386,0.5034,,,
+A,label threshold +/-1.0,LightGBM,1,,0.8355,0.7428,,,
+A,label threshold +/-1.0,LogReg (baseline),1,,0.7722,0.5896,,,
+A,follow-up window 90-365 days,LightGBM,1,,0.762,0.7016,,,
+A,follow-up window 90-365 days,LogReg (baseline),1,,0.6826,0.5191,,,

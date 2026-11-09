@@ -1,0 +1,4 @@
+,pred_improved,pred_stable,pred_worsened
+true_improved,4808,2032,732
+true_stable,2462,12824,2021
+true_worsened,1717,2332,1966

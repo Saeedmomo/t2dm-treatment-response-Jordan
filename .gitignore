@@ -1,0 +1,37 @@
+# ---- Raw EHR data and any patient-level derived files must NEVER be committed ----
+Dataset/
+dataset/
+Create_datasets/
+*.parquet
+*.jsonl
+*.npy
+*.npz
+preds/
+prep/
+cohort_pairs.csv
+cleaned_*.csv
+cleaned_*.parquet
+hba1c_measurements_per_patient.csv
+splits_*.jsonl
+sequences.jsonl
+
+# Trained model weights (large / potentially sensitive)
+*.safetensors
+*.pt
+*.bin
+transformer_model/
+*.ckpt
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

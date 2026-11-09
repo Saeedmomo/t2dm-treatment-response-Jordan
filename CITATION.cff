@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this software or the results in this repository, please cite it as below."
+title: "Predicting HbA1c trajectory in type 2 diabetes (Jordan EHR)"
+abstract: >-
+  Analysis code and aggregate results for a three-class model of the direction of a patient's
+  next HbA1c measurement, derived from routinely collected electronic health record data of a
+  Jordanian health system. A gradient-boosted tree, a BEHRT-style transformer and a
+  regression-to-the-mean logistic baseline are compared on one temporal, patient-disjoint split,
+  with an information-matched factorial analysis of numeric input representation.
+type: software
+license: MIT
+repository-code: "https://github.com/Saeedmomo/t2dm-treatment-response-Jordan"
+authors:
+  - family-names: Rahhal
+    given-names: Dania
+    affiliation: "Al-Ahliyya Amman University, Amman, Jordan"
+  - family-names: Moshawih
+    given-names: Said
+    affiliation: "Al-Ahliyya Amman University, Amman, Jordan"
+  - family-names: Telfah
+    given-names: Suha
+    affiliation: "Al-Ahliyya Amman University, Amman, Jordan"
+keywords:
+  - glycated haemoglobin
+  - diabetes mellitus
+  - electronic health records
+  - clinical prediction model
+  - gradient boosting
+  - transformer
+  - temporal validation

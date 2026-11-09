@@ -1,0 +1,42 @@
+{
+  "FigureS1": {
+    "source_population": 381391,
+    "rule_based_diabetes": 78732,
+    "exposed": 102465,
+    "at_least_two_valid_draws": 201767,
+    "nonzero_change": 190697,
+    "references": {
+      "comorbidity": "Figure 2",
+      "medication": "Figure 3",
+      "glycaemic": "Figure 4 and Table S26"
+    }
+  },
+  "FigureS9": {
+    "cpu_seeds": [
+      0,
+      1,
+      2
+    ],
+    "gpu_seed_auroc": [
+      0.7274,
+      0.725,
+      0.7151,
+      0.7241,
+      0.7273
+    ],
+    "weight_tensors": 73,
+    "attention_key_bias_tensors": 4,
+    "pretraining_macro_auroc": [
+      0.7264,
+      0.7259
+    ],
+    "pretraining_worsened_auroc": [
+      0.6411,
+      0.6395
+    ],
+    "ensembles": [
+      3,
+      3
+    ]
+  }
+}

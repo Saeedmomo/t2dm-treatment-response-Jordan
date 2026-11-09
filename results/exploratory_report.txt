@@ -1,0 +1,178 @@
+==========================================================================================
+1. SEX / BIRTH (demographics)
+==========================================================================================
+date of birth.csv: 382,537 rows, 382,537 unique PATIENT_ID (duplicated rows: 0)
+females patients.csv: 238,893 rows, 238,893 unique
+males patients.csv:   143,644 rows, 143,644 unique
+Overlap between males/females id sets (should be 0): 0
+Union of sex-labelled patients: 382,537
+Patients with DOB but no sex label: 0
+Patients with sex label but no DOB: 0
+DOB parse failures: 1
+DOB range: 1907-01-01 00:00:00 to 2024-08-13 00:00:00
+
+>>> TOTAL DISTINCT PATIENTS (union DOB + sex files): 382,537
+
+==========================================================================================
+2. DIAGNOSIS
+==========================================================================================
+DIAGNOSIS Direct.csv: 238,529 rows, 142,449 unique patients, 238,529 unique PROBLEM_ID
+DIAGNOSIS wide.csv:   263,518 rows, 153,097 unique patients, 263,518 unique PROBLEM_ID
+(PATIENT_ID,PROBLEM_ID) pairs only in Direct: 0
+(PATIENT_ID,PROBLEM_ID) pairs only in wide:   24,989
+pairs in both: 238,529
+-> Direct and wide look like overlapping/duplicate exports of the same problem list, wide is a superset-ish pull.
+DIAGNOSIS wide DATE_ENTERED range: 2018-01-01 00:00:00 to 2022-06-30 00:00:00, parse failures: 0
+
+DIAGNOSIS TYPES TOTAL 8600.csv: 8,658 rows -> reference vocabulary list of diagnosis label strings (no PATIENT_ID), not patient-level data
+diagnosis 760.csv: 758 rows, diagnosis 899.csv: 899 rows -> smaller reference vocab lists (likely diabetes-relevant diagnosis subsets)
+
+Patients with >=1 diagnosis record: 153,097 (40.0% of total)
+
+==========================================================================================
+3. MEDICATIONS
+==========================================================================================
+Medication files: 30 (M1..M30, appear to be arbitrary batch splits of one big dispensing table)
+Columns (most common): ['PATIENT_ID', 'DISPENSED_DATE', 'GENERIC_NAME', 'QTY', 'DAYS_SUPPLY']
+Total rows: 2,574,105
+
+*** Schema is NOT uniform across the 30 medication batch files: ***
+  9 files are MISSING the DAYS_SUPPLY column entirely: ['M22.csv', 'M23.csv', 'M24.csv', 'M25.csv', 'M26.csv', 'M27.csv', 'M28.csv', 'M29.csv', 'M30.csv']
+  1 file(s) have an extra 'R' column (all TRUE in that file, meaning unknown -- possibly a refill flag): ['M10.csv']
+  -> before modeling, medication features involving days_supply will only be available for the other 21 batches.
+Unique patients with >=1 medication: 102,465 (26.8% of total)
+Unique GENERIC_NAME values (drug names): 21
+DISPENSED_DATE range: 2017-03-19 00:00:00 to 2023-08-31 00:00:00
+Average missing %% per column across medication files:
+  PATIENT_ID: 0.00%
+  DISPENSED_DATE: 0.00%
+  GENERIC_NAME: 0.00%
+  QTY: 0.00%
+  DAYS_SUPPLY: 0.00%
+  R: 0.00%
+
+==========================================================================================
+4. VITALS
+==========================================================================================
+vitals BP.csv: 701,254 rows, 45,276 unique patients, columns=['PATIENT_ID', 'NAME', 'RATE'], has DATE column: NO
+vitals height.csv: 56,122 rows, 31,392 unique patients, columns=['PATIENT_ID', 'NAME', 'height inch', 'height cm'], has DATE column: NO
+vitals pulse.csv: 626,983 rows, 37,963 unique patients, columns=['PATIENT_ID', 'NAME', 'RATE'], has DATE column: NO
+vitals wt kg.csv: 359,091 rows, 46,241 unique patients, columns=['PATIENT_ID', 'NAME', 'wt pound', 'Unnamed: 3', 'wt kg '], has DATE column: NO
+
+*** CRITICAL: none of the 4 vitals files (BP, height, pulse, weight) contain a date or timestamp column. ***
+    Row order within each file is the only ordering available and there is no evidence it is chronological
+    (rows are not even contiguous per patient in all files) -- vitals CANNOT be reliably sequenced in time.
+Patients with >=1 vitals record (any type): 75,569 (19.8% of total)
+vitals BP.csv rows contiguous-by-patient in first 200k rows: True
+vitals wt kg.csv rows contiguous-by-patient in first 200k rows: True
+
+==========================================================================================
+5. LAB TESTS
+==========================================================================================
+Number of lab test files: 53 (csv + xlsx), covering ~33 distinct analytes
+Total lab result rows across all analytes: 20,781,075
+Unique patients with >=1 lab result (any analyte): 382,536 (100.0% of total)
+
+Per-analyte file summary saved to Create_results/lab_tests_per_file_summary.csv
+
+Note on '11/22/33' and '1 D/2 D' suffixes: these look like separate export batches of the SAME analyte
+(identical schema, identical LabTestName value, non-overlapping row counts consistent with a paginated pull),
+not different meanings -- confirmed by matching column layout and LabTestName across e.g. CRT 11/22/33.
+
+------------------------------------------------------------------------------------------
+5a. HbA1c deep dive (HBA1C 11.csv + HBA1C 22.csv combined)
+------------------------------------------------------------------------------------------
+Total HbA1c measurements (raw rows, both files): 1,139,747
+Missing result value: 0 (0.00%)
+Missing/unparseable date: 90 (0.01%)
+Exact duplicate rows (same patient/date/value): 588
+Unique patients with >=1 HbA1c value: 382,472 (100.0% of total patients)
+
+HbA1c value distribution (all non-missing rows, units assumed %):
+  min=0.000  max=3438171009.000  mean=3023.428  median=6.100  std=3220499.561
+  p0.1: 0.000
+  p1: 4.200
+  p5: 4.800
+  p25: 5.400
+  p50: 6.100
+  p75: 7.800
+  p95: 10.900
+  p99: 13.000
+  p99.9: 15.500
+
+Plausibility check: values <=0: 7493, values <3%: 7526, values >20%: 109 (outside physiologic range for HbA1c% -- likely entry errors or a different unit/assay, worth cleaning before modeling)
+  The raw max (3,438,171,009) is a single corrupted row (PatientID 2593528, HBA1C 22.csv, 6/20/2018) -- clearly
+  a data-entry/encoding artifact, not a real HbA1c%, and it single-handedly drags the raw mean up to 3,023.4.
+  Counts by magnitude: >1000: 6, >100: 53, >50: 76, >20: 109 -- out of 1,139,747 total, i.e. outliers are rare (<0.01%) but severe enough to break naive mean/std.
+  Implausible (>20) values by source file: {'HBA1C 11.csv': 14, 'HBA1C 22.csv': 95}
+
+HbA1c distribution restricted to a plausible clinical range [2, 20]% (n=1,132,129, 99.332% of all non-missing values):
+  min=2.00  max=20.00  mean=6.84  median=6.10  std=1.97
+  -> this is the range to use as ground truth for reporting/modeling; consistent with a diabetes-heavy population
+     (median ~6.1% is above the normal <5.7% cutoff, IQR spans the pre-diabetic/diabetic range).
+
+Date range of HbA1c measurements: 2011-01-12 11:21:00 to 2025-05-26 11:45:00
+
+HbA1c measurements per patient (distinct timestamps):
+  1 measurement:  179,399 patients
+  2 measurements: 70,670 patients
+  3-5 measurements: 80,202 patients
+  6-10 measurements: 36,139 patients
+  >10 measurements: 16,042 patients
+  max measurements for a single patient: 70
+  median measurements/patient: 2.0, mean: 2.98
+  patients with >=2 HbA1c measurements (usable for a real sequence): 203,053 (53.1% of patients who have HbA1c at all)
+
+==========================================================================================
+6. CROSS-CATEGORY COVERAGE (sparsity)
+==========================================================================================
+          category  n_patients  pct_of_total
+     Sex/DOB (any)      382537         100.0
+         Diagnosis      153097          40.0
+       Medications      102465          26.8
+      Vitals (any)       75569          19.8
+        Labs (any)      382536         100.0
+HbA1c specifically      382472         100.0
+
+Patients present in ALL FOUR of diagnosis+medications+vitals+labs: 19,130 (5.0%)
+
+==========================================================================================
+7. TEMPORAL STRUCTURE -- can real sequences be built?
+==========================================================================================
+Days between CONSECUTIVE HbA1c measurements for the same patient (n=757,205 gaps, from the 203,053 patients with >=2 measurements):
+  min=0  p5=28  median=182  p95=952  max=4812
+  same-day repeat draws (gap=0 days): 4,537 (0.6%)
+
+HbA1c timestamps that exactly coincide with another analyte's timestamp for the same patient (evidence of a lab panel/visit):
+  shares exact timestamp with FBS: 267,152 / 1,138,692 (23.5%)
+  shares exact timestamp with Creatinine (CRT): 301,046 / 1,138,692 (26.4%)
+  shares exact timestamp with Hb: 215,481 / 1,138,692 (18.9%)
+  -> a large share of HbA1c draws coincide to the minute with other analytes, meaning DATE_TIME_SPECIMEN_TAKEN
+     can be used to group multiple lab results into a single 'visit'/specimen draw event.
+
+SUMMARY -- answering "what temporal structure is possible":
+
+* Labs (incl. HbA1c) DO have real timestamps (date+time) and the majority of patients with HbA1c have only
+  1 measurement, but 203,053 patients (53.1% of those with any HbA1c) have
+  2+ dated HbA1c measurements, so genuine irregularly-spaced longitudinal sequences ARE possible for roughly
+  half the HbA1c-bearing patients -- but only about 47% of the rest have just a single snapshot.
+* Multiple lab analytes drawn at the identical timestamp can be grouped into a "visit"/panel using
+  (PatientID, DATE_TIME_SPECIMEN_TAKEN) as a join key -- this is a legitimate way to build a multi-feature
+  per-visit row.
+* Medications only have a DISPENSED_DATE (day resolution, no time), and diagnoses only have DATE_ENTERED
+  (day resolution) -- both can be ordered and joined to lab visits by nearest date, but not to the minute.
+* Vitals (BP, pulse, weight, height) have NO timestamp of any kind. They cannot be placed on the same
+  timeline as labs/meds/diagnoses, and their within-file row order is not verified to be chronological.
+  Options if you still want to use them:
+    (a) drop them from any sequence model and use them only as static/aggregate features (e.g. last-known
+        weight, mean pulse) -- safest, most honest option;
+    (b) if the source system is known to export in visit order, treat row order as a weak chronology proxy
+        -- risky, unverifiable from the data alone, and should be validated with whoever extracted these
+        files before relying on it;
+    (c) request a re-extraction that includes the missing date/timestamp column from the source EHR --
+        best long-term fix if you plan to model vitals dynamics over time.
+* Net assessment: a real sequence-per-patient model is defensible for labs (best), and doable at
+  day-resolution for diagnoses/medications, but vitals as currently exported cannot be sequenced honestly.
+
+
+Figures saved: hba1c_distribution.png, hba1c_measurements_per_patient.png, hba1c_volume_over_time.png, hba1c_gap_days.png, cross_category_coverage.png
